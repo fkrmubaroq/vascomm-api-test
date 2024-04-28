@@ -22,6 +22,11 @@ module.exports = {
         allowNull: false,
         defaultValue: 0,
       },
+      is_active: {
+        type: Sequelize.ENUM("1", "0"),
+        defaultValue: "1",
+        allowNull: false,
+      }
     });
   },
 

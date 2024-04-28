@@ -5,4 +5,14 @@ const RESPONSE_CODE_ENUM = {
   Unauthorized: 401,
 }
 
-module.exports = { RESPONSE_CODE_ENUM };
+const STATUS_FIELD = {
+  Active: "1",
+  Inactive: "0",
+}
+
+const USER_RULE_ENUM = {
+  Admin: "ADM",
+  User: "USR",
+}
+
+module.exports = { RESPONSE_CODE_ENUM, USER_RULE_ENUM, STATUS_FIELD };

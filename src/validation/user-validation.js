@@ -1,28 +1,31 @@
-import Joi from "joi";
+const Joi = require("joi");
+const { USER_RULE_ENUM } = require("../lib/enum");
 
-const registerUserValidation = Joi.object({
-  username: Joi.string().max(100).required(),
-  password: Joi.string().max(100).required(),
-  name: Joi.string().max(100).required(),
-})
-
-const loginUserValidation = Joi.object({
-  username: Joi.string().max(100).required(),
-  password: Joi.string().max(100).required()
-})
-
-const getUserValidation = Joi.string().max(100).required();
+const createUserValidation = Joi.object({
+  email_telp: Joi.string().max(255).required(),
+  password: Joi.string().max(255).required(),
+  role: Joi.string()
+    .valid(USER_RULE_ENUM.Admin, USER_RULE_ENUM.User)
+    .default(USER_RULE_ENUM.User),
+});
 
 const updateUserValidation = Joi.object({
-  username: Joi.string().max(100).required(),
-  password: Joi.string().max(100).optional(),
-  name: Joi.string().max(100).optional(),
-})
-export {
-  getUserValidation,
+  email_telp: Joi.string().max(255).optional(),
+  password: Joi.string().max(255).optional(),
+  role: Joi.string()
+    .valid(USER_RULE_ENUM.Admin, USER_RULE_ENUM.User)
+    .optional(),
+});
+
+const userIdValidation = Joi.number().max(255).positive().required();
+
+const loginUserValidation = Joi.object({
+  email_telp: Joi.string().max(255).required(),
+  password: Joi.string().max(255).required(),
+});
+module.exports = {
   loginUserValidation,
-  registerUserValidation,
-  updateUserValidation
+  createUserValidation,
+  updateUserValidation,
+  userIdValidation,
 };
-
-

@@ -1,4 +1,4 @@
-const { ResponseError } = require("../error/response-error");
+const { RESPONSE_CODE_ENUM } = require("../lib/enum");
 
 const errorMiddleware = async (err, req, res, next) => {
   if (!err) {
@@ -6,21 +6,14 @@ const errorMiddleware = async (err, req, res, next) => {
     return;
   }
 
-  if (err instanceof ResponseError) {
-    res
-      .status(err.status)
-      .json({
-        errors: err.message,
-      })
-      .end();
-  } else {
-    res
-      .status(500)
-      .json({
-        errors: err.message,
-      })
-      .end();
-  }
+  res
+    .status(err?.status || RESPONSE_CODE_ENUM.BadRequest)
+    .json({
+      code: RESPONSE_CODE_ENUM.BadRequest,
+      errors: err.message || err || "error",
+    })
+    .end();
+  
 };
 
 module.exports = { errorMiddleware };

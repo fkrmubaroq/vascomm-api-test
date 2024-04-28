@@ -10,6 +10,7 @@ module.exports = {
         product_name: faker.lorem.words(3),
         image: faker.image.url(),
         price: faker.number.int({ min: 12000, max: 1000000 }),
+        is_active: 1
       });
     }
     return data;

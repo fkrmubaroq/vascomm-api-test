@@ -9,11 +9,6 @@ export const authMiddleware = async (req, res, next) => {
     return;
   }
 
-  // const user = await prismaClient.user.findFirst({
-  //   where: {
-  //     token
-  //   }
-  // })
   const user = false;
   if (!user) {
     res.status(401).json({
