@@ -1,6 +1,6 @@
 # Products API Spec
 
-## GET Products API
+## Get Products API
 
 Endpoint : GET /api/products
 
@@ -14,6 +14,8 @@ Response Body Success :
 
 ```json
 {
+  "code": 200,
+  "message": "ok",
   "data": [
     {
       "id": 1,
@@ -30,3 +32,109 @@ Response Body Success :
   ]
 }
 ```
+
+## Insert Products API
+
+Endpoint : POST /api/product
+
+Request Body : 
+```json
+{
+  "product_name": "optio voluptatem officiis",
+  "image": "https://loremflickr.com/640/480?lock=422447062974464",
+  "price": 839872
+}
+```
+
+Response Body : 
+```json
+{
+    "code": 201,
+    "message": "successfully added",
+    "data": {
+        "is_active": "1",
+        "id": 50,
+        "product_name": "Kunpay YAKUN",
+        "price": 101010,
+        "image": "XXX"
+    }
+}
+```
+
+## Update Products API
+Endpoint : PUT /api/product/:id
+
+Request Body : 
+```json
+{
+  "product_name": "optio voluptatem officiis", // optional
+  "image": "https://loremflickr.com/640/480?lock=422447062974464", // optional
+  "price": 839872 // optional
+}
+```
+
+Response Body : 
+```json
+{
+  "code": 200,
+  "message": "successfully update",
+  "data": {
+      "id": 49,
+      "product_name": "optio voluptatem officiis",
+      "image": "https://loremflickr.com/640/480?lock=422447062974464",
+      "price": 839872,
+      "is_active": "1"
+  }
+}
+```
+
+
+## Soft Delete Products API
+Endpoint : PATCH /api/product/soft-delete/:id
+
+Response Body : 
+```json
+{
+  "code": 200,
+  "message": "successfully soft deleted",
+  "data": {
+      "id": 49,
+      "product_name": "optio voluptatem officiis",
+      "image": "https://loremflickr.com/640/480?lock=422447062974464",
+      "price": 839872,
+      "is_active": "1"
+  }
+}
+```
+
+## Restore Products API
+Endpoint : PATCH /api/product/restore/:id
+
+Response Body : 
+```json
+{
+  "code": 200,
+  "message": "successfully soft restored",
+  "data": {
+      "id": 49,
+      "product_name": "optio voluptatem officiis",
+      "image": "https://loremflickr.com/640/480?lock=422447062974464",
+      "price": 839872,
+      "is_active": "1"
+  }
+}
+```
+
+
+## Destroy Products API
+Endpoint : DELETE /api/product/:id
+
+Response Body : 
+```json
+{
+  "code": 200,
+  "message": "successfully soft deleted",
+  "data": 1
+}
+```
+

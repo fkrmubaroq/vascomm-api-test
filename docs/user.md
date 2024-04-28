@@ -1,141 +1,165 @@
 # User API Spec
 
-## Register User API
+## Get User API
 
-Endpoint : POST /api/users
+Endpoint : GET /api/user
 
-Request Body : 
+Query params :
 
-```json
-  {
-    "username" : "fikri",
-    "password" : "pa",
-    "name" : "fikri Mubaroq"
-  }
-```
+- take : limit data (optional) default 20
+- skip : offset data (optional) default 0
+- search : Search by product_name using like (optional)
 
-Response Body Success : 
+Response Body Success :
 
 ```json
 {
-  "data": {
-    "username": "fikri",
-    "name": "fikri Mubaroq"
-  },
-  "errors": "message"
+  "code": 200,
+  "message": "ok",
+  "data": [
+    {
+      "id": 1,
+      "email_telp": "1-847-478-2653",
+      "role": "USR",
+      "is_active": "1"
+    },
+    {
+      "id": 2,
+      "email_telp": "Julianne_Hirthe@yahoo.com",
+      "role": "USR",
+      "is_active": "1"
+    }
+  ]
 }
 ```
 
-Response Body Error : 
+## Create User API
 
-```json
-{
-  "errors" : "username already registered"
-}
-```
-
-## Login User API
-
-Endpoint : POST/api/users/login
+Endpoint : POST /api/user
 
 Request Body :
 
 ```json
-  {
-    "username": "fikri",
-    "password": "123"
-  }
+{
+  "email_telp": "fkrmubaroq@gmail.com",
+  "password": "123",
+  "role": "USR" // optional
+}
 ```
 
-Response body Success: 
+Response Body :
 
-```json
-  {
-   "data":{
-    "token": "unique-token"
-   } 
-  }
-```
-
-Response body Error : 
 ```json
 {
-  "errors" : "username or password wrong"
+  "code": 201,
+  "message": "successfully added",
+  "data": {
+    "id": 61,
+    "is_active": "1",
+    "email_telp": "fkrmubaroq@gmail.com",
+    "password": "123",
+    "role": "USR"
+  }
+}
+```
+
+Response Error : 
+
+```json
+{
+  "code": 400,
+  "errors": "email or phone already exist"
 }
 ```
 
 ## Update User API
-Endpoint : PATCH /api/users/current
 
-Headers :
-- Authorization : token
+Endpoint : PUT /api/user/:id
 
 Request Body :
+
 ```json
 {
-  "name" : "fikri husni mubaroq",
-  "password" : "new password"
+  "email_telp": "fkrmubaroq@gmail.com", // optional
+  "password": "12345", // optional
+  "role": "USR" // optional
 }
 ```
 
-Response Body Success : 
+Response Body :
+
 ```json
 {
-  "data" : {
-    "username" : "fikri",
-    "name" : "fikri husni mubaroq"
-  }
-}
-
-Response Body Error : 
-```json
-  {
-    "errors" : "Name length max 100"
-  }
-```
-## Get User API
-
-Endpoint : GET /api/users/current
-
-Headers :
-- Authorization : token
-
-Response Body Success : 
-```json
-{
+  "code": 200,
+  "message": "successfully update",
   "data": {
-    "username" : "fikri",
-    "name" : "fikri husni mubaroq"
+    "id": 49,
+    "email_telp": "fkrmubaroq@gmail.com",
+    "password": "12345",
+    "role": "USR",
+    "is_active": "1"
   }
 }
 ```
 
-Response Body Error : 
+Response Error : 
+
 ```json
 {
-  "errors" : "Unauthorize"
+  "code": 400,
+  "errors": "email or phone already exist"
+}
+
+## Soft Delete User API
+
+Endpoint : PATCH /api/user/soft-delete/:id
+
+Response Body :
+
+```json
+{
+  "code": 200,
+  "message": "successfully soft deleted",
+  "data": {
+    "id": 49,
+    "email_telp": "fkrmubaroq@gmail.com",
+    "password": "123",
+    "role": "USR",
+    "is_active": "1"
+  }
 }
 ```
 
+## Restore User API
 
-## Logout User API
+Endpoint : PATCH /api/user/restore/:id
 
-Endpoint : DELETE /api/users/logout
-
-Headers :
-- Authorization : token
-
-Response Body Success : 
+Response Body :
 
 ```json
 {
-  "data": "OK"
+  "code": 200,
+  "message": "successfully soft restored",
+  "data": {
+    "id": 49,
+    "email_telp": "fkrmubaroq@gmail.com",
+    "password": "123",
+    "role": "USR",
+    "is_active": "1"
+  }
 }
 ```
 
-Response Body Error : 
+## Destroy User API
+
+Endpoint : DELETE /api/user/:id
+
+Response Body :
+
 ```json
 {
- "erros" : "Unauthorize" 
+  "code": 200,
+  "message": "successfully soft deleted",
+  "data": 1
 }
 ```
