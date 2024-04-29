@@ -28,6 +28,11 @@ const Product = sequelize.define(
       defaultValue: "1",
       allowNull: false,
     },
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    }
   },
   {
     timestamps: false,

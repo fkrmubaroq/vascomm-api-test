@@ -9,9 +9,18 @@ const User = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    email_telp: {
+    email: {
       type: DataTypes.STRING(255),
       unique: true,
+      allowNull: false,
+    },
+    telp: {
+      type: DataTypes.STRING(20),
+      unique: true,
+      allowNull: false,
+    },
+    full_name: {
+      type: DataTypes.STRING(255),
       allowNull: false,
     },
     password: {
@@ -27,6 +36,11 @@ const User = sequelize.define(
       type: DataTypes.ENUM("1", "0"),
       defaultValue: "1",
       allowNull: false,
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
     },
   },
   {

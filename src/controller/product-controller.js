@@ -2,14 +2,21 @@ const { RESPONSE_CODE_ENUM, STATUS_FIELD } = require("../lib/enum");
 const productService = require("../service/product-service");
 const url = require("url");
 const validate = require("../validation");
-const { createProductValidation, updateProductValidation, productIdValidation } = require("../validation/product-validation");
+const {
+  createProductValidation,
+  updateProductValidation,
+  productIdValidation,
+} = require("../validation/product-validation");
 const { queryParamValidation } = require("../validation/global-validation");
 
 const getProducts = async (req, res, next) => {
   try {
-    const query = validate(queryParamValidation, url.parse(req.url, true)?.query);
+    const query = validate(
+      queryParamValidation,
+      url.parse(req.url, true)?.query
+    );
 
-    const result = await productService.get({ ...query, is_active: STATUS_FIELD.Active });
+    const result = await productService.get(query);
     res.status(RESPONSE_CODE_ENUM.Ok).json(result);
   } catch (e) {
     next(e);
@@ -20,7 +27,10 @@ const getTrashProducts = async (req, res, next) => {
   try {
     const query = url.parse(req.url, true)?.query;
 
-    const result = await productService.get({ ...query, is_active: STATUS_FIELD.Inactive });
+    const result = await productService.get({
+      ...query,
+      is_active: STATUS_FIELD.Inactive,
+    });
     res.status(RESPONSE_CODE_ENUM.Ok).json(result);
   } catch (e) {
     next(e);
@@ -29,7 +39,14 @@ const getTrashProducts = async (req, res, next) => {
 
 const insertProduct = async (req, res, next) => {
   try {
-    const payload = validate(createProductValidation, req.body);
+    const fileName = req.file.filename;
+    const requestBody = {
+      ...req.body,
+    };
+    if (fileName) {
+      requestBody.image = fileName;
+    }
+    const payload = validate(createProductValidation, requestBody);
     const result = await productService.insert(payload);
     res.status(RESPONSE_CODE_ENUM.Ok).json(result);
   } catch (e) {
@@ -40,8 +57,15 @@ const insertProduct = async (req, res, next) => {
 const updateProduct = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const payload = validate(updateProductValidation, req.body);
-    const result = await productService.update(id,payload);
+    const fileName = req?.file?.filename;
+    const requestBody = {
+      ...req.body,
+    };
+    if (fileName) {
+      requestBody.image = fileName;
+    }
+    const payload = validate(updateProductValidation, requestBody);
+    const result = await productService.update(id, payload);
     res.status(RESPONSE_CODE_ENUM.Ok).json(result);
   } catch (e) {
     next(e);

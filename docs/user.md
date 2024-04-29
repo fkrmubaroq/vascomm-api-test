@@ -19,15 +19,21 @@ Response Body Success :
   "data": [
     {
       "id": 1,
-      "email_telp": "1-847-478-2653",
+      "email": "john@mail.com",
+      "telp": "289432",
+      "full_name": "John Doe",
       "role": "USR",
-      "is_active": "1"
+      "is_active": "1",
+      "created_at": "2024-09-01 19:30:27"
     },
     {
       "id": 2,
-      "email_telp": "Julianne_Hirthe@yahoo.com",
+      "email": "doe@mail.com",
+      "telp": "289432",
+      "full_name": "John Doe",
       "role": "USR",
-      "is_active": "1"
+      "is_active": "1",
+      "created_at": "2024-09-01 19:30:27"
     }
   ]
 }
@@ -41,9 +47,11 @@ Request Body :
 
 ```json
 {
-  "email_telp": "fkrmubaroq@gmail.com",
+  "email": "doe@mail.com",
+  "telp": "289432",
+  "full_name": "John Doe",
   "password": "123",
-  "role": "USR" // optional
+  "role": "USR"
 }
 ```
 
@@ -55,15 +63,16 @@ Response Body :
   "message": "successfully added",
   "data": {
     "id": 61,
-    "is_active": "1",
-    "email_telp": "fkrmubaroq@gmail.com",
+    "email": "doe@mail.com",
+    "telp": "289432",
+    "full_name": "John Doe",
     "password": "123",
     "role": "USR"
   }
 }
 ```
 
-Response Error : 
+Response Error :
 
 ```json
 {
@@ -80,9 +89,11 @@ Request Body :
 
 ```json
 {
-  "email_telp": "fkrmubaroq@gmail.com", // optional
-  "password": "12345", // optional
-  "role": "USR" // optional
+  "email": "doe@mail.com",
+  "telp": "289432",
+  "full_name": "John Doe",
+  "password": "123",
+  "role": "USR"
 }
 ```
 
@@ -94,17 +105,20 @@ Response Body :
   "message": "successfully update",
   "data": {
     "id": 49,
-    "email_telp": "fkrmubaroq@gmail.com",
-    "password": "12345",
+    "email": "doe@mail.com",
+    "telp": "289432",
+    "full_name": "John Doe",
+    "password": "123",
     "role": "USR",
-    "is_active": "1"
+    "is_active": 1,
+    "created_at": "2024-09-01 19:30:27"
   }
 }
 ```
 
-Response Error : 
+Response Error :
 
-```json
+````json
 {
   "code": 400,
   "errors": "email or phone already exist"
@@ -122,13 +136,16 @@ Response Body :
   "message": "successfully soft deleted",
   "data": {
     "id": 49,
-    "email_telp": "fkrmubaroq@gmail.com",
+    "email": "doe@mail.com",
+    "telp": "289432",
+    "full_name": "John Doe",
     "password": "123",
     "role": "USR",
-    "is_active": "1"
+    "is_active": 1,
+    "created_at": "2024-09-01 19:30:27"
   }
 }
-```
+````
 
 ## Restore User API
 
@@ -142,10 +159,13 @@ Response Body :
   "message": "successfully soft restored",
   "data": {
     "id": 49,
-    "email_telp": "fkrmubaroq@gmail.com",
+    "email": "doe@mail.com",
+    "telp": "289432",
+    "full_name": "John Doe",
     "password": "123",
     "role": "USR",
-    "is_active": "1"
+    "is_active": 1,
+    "created_at": "2024-09-01 19:30:27"
   }
 }
 ```

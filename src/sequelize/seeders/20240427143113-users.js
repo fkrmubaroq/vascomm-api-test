@@ -9,10 +9,13 @@ module.exports = {
     const password = await bcrypt.hash("123", 10);
     for (let i = 1; i < total; i++) {
       data.push({
-        email_telp: i % 2 === 0 ? faker.internet.email() : faker.number.int({ min: 882822323, max: 9999999999 }),
+        email: faker.internet.email(),
+        telp: faker.number.int({ min: 1000000000, max: 9999999999 }),
+        full_name: faker.person.fullName(),
         password,
         role: i === total-1 ? "ADM" : "USR",
-        is_active: 1
+        is_active: 1,
+        created_at: faker.date.between({ from: "2024-01-01", to: "2024-12-31" }),
       });
     }
     return data;

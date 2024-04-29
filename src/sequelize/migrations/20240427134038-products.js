@@ -26,7 +26,12 @@ module.exports = {
         type: Sequelize.ENUM("1", "0"),
         defaultValue: "1",
         allowNull: false,
-      }
+      },
+      created_at: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.fn("now")
+      },
     });
   },
 

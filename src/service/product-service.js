@@ -2,18 +2,34 @@ const Product = require("../sequelize/models/products");
 const { Op } = require("sequelize");
 const { RESPONSE_CODE_ENUM, STATUS_FIELD } = require("../lib/enum");
 const { ResponseError } = require("../error/response-error");
+const fs = require("fs");
+const path = require("path");
+async function unlinkFile(src) {
+  return new Promise((resolve) => {
+    const filePath = path.resolve("public/uploads", src);
+    fs.access(filePath, async (err) => {
+      if (err) {
+        resolve(false);
+        return;
+      }
+      await fs.promises.unlink(filePath);
+      resolve(true);
+    });
+  });
+}
 
 const get = async (query) => {
-  const { take, skip, search, is_active } = query
+  const { take, skip, search } = query;
 
   const filters = {
-    limit: take && take > 50 ? 50 : +take || 20,
     offset: +skip || 0,
-    where: {
-      is_active,
-    },
+    where: {},
+    order: [["id", "DESC"]],
   };
 
+  if (take) {
+    filters.limit = take;
+  }
   if (search) {
     filters.where.product_name = {
       [Op.substring]: search,
@@ -30,19 +46,23 @@ const get = async (query) => {
 
 const insert = async (payload) => {
   const result = await Product.create(payload, {
-    fields: ["product_name", "price", "image"]
+    fields: ["product_name", "price", "image"],
   });
 
   return {
     code: RESPONSE_CODE_ENUM.Inserted,
     message: "successfully added",
-    data: result
-  }
+    data: result,
+  };
 };
 
-const update = async (id,payload) => {
+const update = async (id, payload) => {
+  const prevData = await Product.findOne({ where: { id } });
+  if (prevData.image && payload.image) {
+    await unlinkFile(prevData.image);
+  }
   await Product.update(payload, {
-    where:{ id }
+    where: { id },
   });
 
   const data = await Product.findOne({ where: { id } });
@@ -50,8 +70,8 @@ const update = async (id,payload) => {
   return {
     code: RESPONSE_CODE_ENUM.Ok,
     message: "successfully update",
-    data
-  }
+    data,
+  };
 };
 
 const softDelete = async (id) => {
@@ -59,39 +79,50 @@ const softDelete = async (id) => {
   if (data.is_active === STATUS_FIELD.Inactive) {
     throw new ResponseError(400, "already soft deleted");
   }
-  await Product.update({ is_active: '0' },{
-    where:{ id }
-  });
+  await Product.update(
+    { is_active: "0" },
+    {
+      where: { id },
+    }
+  );
 
   return {
     code: RESPONSE_CODE_ENUM.Ok,
     message: "successfully soft deleted",
-    data
-  }
+    data,
+  };
 };
 
 const restore = async (id) => {
-  const result = await Product.update({ is_active: '1' },{
-    where:{ id }
-  });
+  await Product.update(
+    { is_active: "1" },
+    {
+      where: { id },
+    }
+  );
   const data = await Product.findOne({ where: { id } });
 
   return {
     code: RESPONSE_CODE_ENUM.Ok,
     message: "successfully restored",
-    data
-  }
+    data,
+  };
 };
 
 const destroy = async (id) => {
+  const prevData = await Product.findOne({ where: { id } });
+
+  if (prevData.image) {
+    await unlinkFile(prevData.image);
+  }
   const result = await Product.destroy({
-    where:{ id }
+    where: { id },
   });
 
   return {
     code: RESPONSE_CODE_ENUM.Ok,
     message: "successfully deleted",
-    data: result
-  }
+    data: result,
+  };
 };
 module.exports = { get, insert, update, destroy, softDelete, restore };

@@ -27,10 +27,7 @@ const getUsers = async (req, res, next) => {
       url.parse(req.url, true)?.query
     );
 
-    const result = await userService.get({
-      ...query,
-      is_active: STATUS_FIELD.Active,
-    });
+    const result = await userService.get(query);
     res.status(RESPONSE_CODE_ENUM.Ok).json(result);
   } catch (e) {
     next(e);
@@ -65,6 +62,7 @@ const insertUser = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {
   try {
+    console.log("PEYLOD",  req.body);
     const id = req.params.id;
     const payload = validate(updateUserValidation, req.body);
     const result = await userService.update(id, payload);

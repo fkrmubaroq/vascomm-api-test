@@ -6,16 +6,19 @@ const { ResponseError } = require("../error/response-error");
 const login = async (payload) => {};
 
 const get = async (query) => {
-  const { take, skip, search, is_active } = query;
+  const { take, skip, search } = query;
 
   const filters = {
-    limit: take && take > 50 ? 50 : +take || 20,
     offset: +skip || 0,
-    where: { is_active },
+    where: {},
+    order: [["id", "DESC"]],
   };
 
+   if (take) {
+     filters.limit = take;
+   }
   if (search) {
-    filters.where.email_telp = {
+    filters.where.full_name = {
       [Op.substring]: search,
     };
   }
@@ -33,17 +36,23 @@ const get = async (query) => {
 
 const insert = async (payload) => {
   const data = await User.findOne({
-    where: { email_telp: payload.email_telp },
+    where: { email: payload.email },
   });
-  if (data?.email_telp) {
+  if (data?.email) {
     throw new ResponseError(
       RESPONSE_CODE_ENUM.BadRequest,
-      "email or phone already exist"
+      `email already exist`
     );
   }
-
+  if (data?.telp) {
+    throw new ResponseError(
+      RESPONSE_CODE_ENUM.BadRequest,
+      `phone already exist`
+    );
+  }
   const result = await User.create(payload, {
-    fields: ["email_telp", "password", "role"],
+    fields: ["email", "telp", "full_name", "password", "role"],
+    attributes: { exclude: ["password"] },
   });
 
   return {
@@ -54,14 +63,27 @@ const insert = async (payload) => {
 };
 
 const update = async (id, payload) => {
-  const findUser = await User.findOne({
-    where: { email_telp: payload.email_telp },
+  const findEmail = await User.findOne({
+    where: {
+     telp: payload.telp
+    },
+  });
+  const findTelp = await User.findOne({
+    where: {
+     telp: payload.telp
+    },
   });
 
-  if (findUser?.email_telp) {
+  if (findEmail?.email) {
     throw new ResponseError(
       RESPONSE_CODE_ENUM.BadRequest,
-      "email or phone already exist"
+      "email already exist"
+    );
+  }
+  if (findTelp?.telp) {
+    throw new ResponseError(
+      RESPONSE_CODE_ENUM.BadRequest,
+      "phone already exist"
     );
   }
 

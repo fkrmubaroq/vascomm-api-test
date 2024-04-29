@@ -1,13 +1,14 @@
 const express = require("express");
 const productController = require("../controller/product-controller");
 const userController = require("../controller/user-controller");
-
+const { uploadImage } = require("./storage");
 const route = new express.Router();
+
 
 route.get("/api/product", productController.getProducts);
 route.get("/api/product/trash", productController.getTrashProducts);
-route.post("/api/product", productController.insertProduct);
-route.put("/api/product/:id", productController.updateProduct);
+route.post("/api/product", uploadImage, productController.insertProduct);
+route.put("/api/product/:id",uploadImage, productController.updateProduct);
 route.patch("/api/product/restore/:id", productController.restoreProduct);
 route.patch("/api/product/soft-delete/:id", productController.softDeleteProduct);
 route.delete("/api/product/:id", productController.deleteProduct);

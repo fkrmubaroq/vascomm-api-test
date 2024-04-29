@@ -10,7 +10,11 @@ module.exports = {
         product_name: faker.lorem.words(3),
         image: faker.image.url(),
         price: faker.number.int({ min: 12000, max: 1000000 }),
-        is_active: 1
+        is_active: 1,
+        created_at: faker.date.between({
+          from: "2024-01-01",
+          to: "2024-12-31",
+        }),
       });
     }
     return data;

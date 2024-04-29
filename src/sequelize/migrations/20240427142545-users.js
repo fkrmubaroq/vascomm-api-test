@@ -8,9 +8,18 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true,
       },
-      email_telp: {
+      email: {
         type: Sequelize.STRING(255),
         unique: true,
+        allowNull: false,
+      },
+      telp: {
+        type: Sequelize.STRING(20),
+        unique: true,
+        allowNull: false,
+      },
+      full_name: {
+        type: Sequelize.STRING(255),
         allowNull: false,
       },
       password: {
@@ -26,6 +35,11 @@ module.exports = {
         type: Sequelize.ENUM("1", "0"),
         defaultValue: "1",
         allowNull: false,
+      },
+      created_at: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.fn("now"),
       },
     });
   },
